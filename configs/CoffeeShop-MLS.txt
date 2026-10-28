@@ -1,0 +1,71 @@
+!
+! Coffee Shop Network - Multilayer Switch Configuration
+! Device hostname: CoffeeShop-MLS
+!
+hostname CoffeeShop-MLS
+no ip domain-lookup
+enable secret Cisco123!
+service password-encryption
+banner motd #Authorized Access Only!!#
+!
+line console 0
+ password Cisco123!
+ login
+ logging synchronous
+!
+vlan 10
+ name MANAGEMENT_OFFICE
+!
+vlan 20
+ name POS
+!
+vlan 30
+ name GUEST_WIFI
+!
+vlan 99
+ name NETWORK_MANAGEMENT
+!
+interface range FastEthernet0/1-5
+ description Assigned to the management office VLAN
+ switchport mode access
+ switchport access vlan 10
+ spanning-tree portfast
+!
+interface range FastEthernet0/6-10
+ description Assigned to the POS VLAN
+ switchport mode access
+ switchport access vlan 20
+ spanning-tree portfast
+!
+interface FastEthernet0/11
+ description GUEST_WIFI_ACCESS_POINT
+ switchport mode access
+ switchport access vlan 30
+ spanning-tree portfast
+!
+interface GigabitEthernet0/1
+ description Connected_to_CoffeeShop-RTR_G0/1
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ switchport trunk allowed vlan 10,20,30,99
+ no shutdown
+!
+interface Vlan99
+ description SWITCH_MANAGEMENT
+ ip address 192.168.99.2 255.255.255.0
+ no shutdown
+!
+ip default-gateway 192.168.99.1
+!
+ip domain-name coffeeshop.local
+username admin privilege 15 secret Cisco123!
+crypto key generate rsa
+ip ssh version 2
+!
+line vty 0 15
+ login local
+ transport input ssh
+ exec-timeout 10
+!
+end
+write memory

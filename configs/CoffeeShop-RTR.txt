@@ -1,0 +1,72 @@
+!
+! Coffee Shop Network - Router Configuration
+! Device hostname: CoffeeShop-RTR
+!
+hostname CoffeeShop-RTR
+no ip domain-lookup
+enable secret Cisco123!
+service password-encryption
+banner motd #Unauthorized Access is Prohibited#
+!
+line console 0
+ password Cisco123!
+ login
+ logging synchronous
+!
+interface GigabitEthernet0/0
+ description Connected_to_ISP_G0/0_ETH6
+ no shutdown
+!
+interface GigabitEthernet0/1
+ description Connected_to_CoffeeShop-MLS_G0/1
+ no shutdown
+!
+interface GigabitEthernet0/1.10
+ description Management_Office_Gateway
+ encapsulation dot1Q 10
+ ip address 192.168.10.1 255.255.255.0
+!
+interface GigabitEthernet0/1.20
+ description POS_Gateway
+ encapsulation dot1Q 20
+ ip address 192.168.20.1 255.255.255.0
+!
+interface GigabitEthernet0/1.30
+ description Guest_WiFi_Gateway
+ encapsulation dot1Q 30
+ ip address 192.168.30.1 255.255.255.0
+ ip access-group GUEST_RESTRICTIONS in
+!
+interface GigabitEthernet0/1.99
+ description Network_Management_Gateway
+ encapsulation dot1Q 99
+ ip address 192.168.99.1 255.255.255.0
+!
+ip dhcp excluded-address 192.168.10.1 192.168.10.20
+ip dhcp excluded-address 192.168.20.1 192.168.20.20
+ip dhcp excluded-address 192.168.30.1 192.168.30.20
+!
+ip dhcp pool Management_office_pool
+ network 192.168.10.0 255.255.255.0
+ default-router 192.168.10.1
+ dns-server 0.0.0.0
+!
+ip dhcp pool POS_pool
+ network 192.168.20.0 255.255.255.0
+ default-router 192.168.20.1
+ dns-server 0.0.0.0
+!
+ip dhcp pool Guest_wifi_pool
+ network 192.168.30.0 255.255.255.0
+ default-router 192.168.30.1
+ dns-server 0.0.0.0
+!
+ip access-list extended GUEST_RESTRICTIONS
+ permit udp any eq bootpc any eq bootps
+ deny ip 192.168.30.0 0.0.0.255 192.168.10.0 0.0.0.255
+ deny ip 192.168.30.0 0.0.0.255 192.168.20.0 0.0.0.255
+ deny ip 192.168.30.0 0.0.0.255 192.168.99.0 0.0.0.255
+ permit ip 192.168.30.0 0.0.0.255 any
+!
+end
+write memory
