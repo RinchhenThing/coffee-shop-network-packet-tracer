@@ -109,4 +109,4 @@ Commands used to confirm everything worked: `show vlan brief`, `show interface b
 
 ## Author
 
-**Your Name** | [LinkedIn](https://www.linkedin.com/) | your.email@example.com
+**Rinchhen Thing** | [LinkedIn](https://www.linkedin.com/in/rinchhen-thing-764814311/) | thingrinchhen@gmail.com
