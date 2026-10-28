@@ -2,7 +2,7 @@
 
 A segmented small-business network designed and configured in Cisco Packet Tracer. The goal was to keep the shop's office and point-of-sale systems separate and secure while still offering free guest Wi-Fi to customers.
 
-![Network topology](network_diagram.png)
+![Network topology](network-diagram.png)
 
 ## Project Summary
 
